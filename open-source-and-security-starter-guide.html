@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Open-Source & Online Security Starter Guide</title>
+    <style>
+        :root {
+            --bg-color: #ffffff;
+            --text-color: #333333;
+            --header-bg: #f8f9fa;
+            --border-color: #e9ecef;
+            --code-bg: #f8f9fa;
+            --link-color: #0066cc;
+            --button-bg: #007bff;
+            --button-text: #ffffff;
+            --shadow: rgba(0, 0, 0, 0.1);
+        }
+
+        [data-theme="dark"] {
+            --bg-color: #1a1a1a;
+            --text-color: #e0e0e0;
+            --header-bg: #2d2d2d;
+            --border-color: #404040;
+            --code-bg: #2d2d2d;
+            --link-color: #66b3ff;
+            --button-bg: #0056b3;
+            --button-text: #ffffff;
+            --shadow: rgba(0, 0, 0, 0.3);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.6;
+            color: var(--text-color);
+            background-color: var(--bg-color);
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        .header {
+            background-color: var(--header-bg);
+            padding: 1rem 0;
+            border-bottom: 1px solid var(--border-color);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            transition: background-color 0.3s ease;
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--text-color);
+        }
+
+        .theme-toggle {
+            background: var(--button-bg);
+            color: var(--button-text);
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .theme-toggle:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px var(--shadow);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: var(--text-color);
+            text-align: center;
+        }
+
+        h2 {
+            font-size: 2rem;
+            margin-top: 3rem;
+            margin-bottom: 1rem;
+            color: var(--text-color);
+            border-bottom: 2px solid var(--border-color);
+            padding-bottom: 0.5rem;
+        }
+
+        h3 {
+            font-size: 1.5rem;
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+            color: var(--text-color);
+        }
+
+        p {
+            margin-bottom: 1rem;
+            text-align: justify;
+        }
+
+        ul, ol {
+            margin-left: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        li {
+            margin-bottom: 0.5rem;
+        }
+
+        a {
+            color: var(--link-color);
+            text-decoration: none;
+            transition: opacity 0.2s ease;
+        }
+
+        a:hover {
+            opacity: 0.8;
+            text-decoration: underline;
+        }
+
+        code {
+            background-color: var(--code-bg);
+            padding: 0.2rem 0.4rem;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+        }
+
+        .quick-start {
+            background-color: var(--header-bg);
+            padding: 2rem;
+            border-radius: 10px;
+            margin: 2rem 0;
+            border-left: 4px solid var(--button-bg);
+        }
+
+        .tool-category {
+            background-color: var(--header-bg);
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin: 1.5rem 0;
+            transition: transform 0.2s ease;
+        }
+
+        .tool-category:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px var(--shadow);
+        }
+
+        .checklist {
+            background-color: var(--header-bg);
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin: 1rem 0;
+        }
+
+        .checklist input[type="checkbox"] {
+            margin-right: 0.5rem;
+            transform: scale(1.2);
+        }
+
+        .threat-level {
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 8px;
+            border-left: 4px solid;
+        }
+
+        .threat-casual {
+            border-left-color: #28a745;
+            background-color: rgba(40, 167, 69, 0.1);
+        }
+
+        .threat-enhanced {
+            border-left-color: #ffc107;
+            background-color: rgba(255, 193, 7, 0.1);
+        }
+
+        .threat-professional {
+            border-left-color: #dc3545;
+            background-color: rgba(220, 53, 69, 0.1);
+        }
+
+        .challenge-week {
+            display: inline-block;
+            background-color: var(--button-bg);
+            color: var(--button-text);
+            padding: 0.3rem 0.8rem;
+            border-radius: 15px;
+            font-weight: bold;
+            margin-right: 0.5rem;
+        }
+
+        .emoji {
+            font-size: 1.2em;
+            margin-right: 0.5rem;
+        }
+
+        .footer {
+            text-align: center;
+            padding: 2rem;
+            margin-top: 3rem;
+            border-top: 1px solid var(--border-color);
+            background-color: var(--header-bg);
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            h2 {
+                font-size: 1.5rem;
+            }
+            
+            .header-content {
+                padding: 0 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <div class="logo">🔒 Security Guide</div>
+            <button class="theme-toggle" onclick="toggleTheme()">
+                <span id="theme-icon">🌙</span>
+                <span id="theme-text">Dark Mode</span>
+            </button>
+        </div>
+    </header>
+
+    <div class="container">
+        <h1><strong>Open-Source &amp; Online Security Starter Guide</strong></h1>
+
+        <p><strong>Welcome to Digital Freedom &amp; Security!</strong><br>
+        This comprehensive guide will help you reclaim your privacy and secure your digital life using powerful open-source tools. Whether you're a complete beginner or looking to upgrade your security, we've got you covered.</p>
+
+        <div class="quick-start">
+            <h2><span class="emoji">🚀</span>Quick Start (5-Minute Setup)</h2>
+            <p><strong>New to privacy tools? Start here:</strong></p>
+            <ol>
+                <li>Install <a href="https://www.mozilla.org/firefox/">Firefox</a> and add <a href="https://addons.mozilla.org/en-US/firefox/addon/ublock-origin/">uBlock Origin</a></li>
+                <li>Create a <a href="https://bitwarden.com/">Bitwarden</a> account and install the browser extension</li>
+                <li>Switch your search engine to <a href="https://duckduckgo.com/">DuckDuckGo</a></li>
+                <li>Download <a href="https://signal.org/">Signal</a> for secure messaging</li>
+                <li>Enable two-factor authentication on your most important accounts</li>
+            </ol>
+        </div>
+
+        <h2><span class="emoji">📱</span>Essential Tools by Category</h2>
+
+        <div class="tool-category">
+            <h3><span class="emoji">🌐</span>Web Browsing &amp; Search</h3>
+            <p><strong>🔹 Browser:</strong> <a href="https://www.mozilla.org/firefox/">Firefox</a> <strong>(Beginner)</strong><br>
+            Privacy-friendly and customizable with excellent add-on support.</p>
+
+            <p><strong>🔹 Privacy Extensions:</strong></p>
+            <ul>
+                <li><a href="https://addons.mozilla.org/en-US/firefox/addon/ublock-origin/">uBlock Origin</a> - Blocks ads and trackers <strong>(Beginner)</strong></li>
+                <li><a href="https://privacybadger.org/">Privacy Badger</a> - Automatically blocks trackers <strong>(Beginner)</strong></li>
+                <li><a href="https://addons.mozilla.org/en-US/firefox/addon/clearurls/">ClearURLs</a> - Removes tracking parameters <strong>(Intermediate)</strong></li>
+            </ul>
+
+            <p><strong>🔹 Search Engines:</strong></p>
+            <ul>
+                <li><a href="https://duckduckgo.com/">DuckDuckGo</a> - No tracking, no profiling <strong>(Beginner)</strong></li>
+                <li><a href="https://searx.space/">Searx</a> - Open-source metasearch engine <strong>(Intermediate)</strong></li>
+            </ul>
+        </div>
+
+        <div class="tool-category">
+            <h3><span class="emoji">🔐</span>Password &amp; Authentication</h3>
+            <p><strong>🔹 Password Manager:</strong> <a href="https://bitwarden.com/">Bitwarden</a> <strong>(Beginner)</strong><br>
+            Secure, cross-platform password management with free tier.</p>
+
+            <p><strong>🔹 Two-Factor Authentication:</strong> <a href="https://getaegis.app/">Aegis Authenticator</a> (Android) / <a href="https://www.tofuauth.com/">Tofu</a> (iOS) <strong>(Beginner)</strong><br>
+            Open-source alternatives to Google Authenticator.</p>
+        </div>
+
+        <div class="tool-category">
+            <h3><span class="emoji">💬</span>Communication</h3>
+            <p><strong>🔹 Secure Messaging:</strong> <a href="https://signal.org/">Signal</a> <strong>(Beginner)</strong><br>
+            End-to-end encrypted messaging with disappearing messages.</p>
+
+            <p><strong>🔹 Advanced Messaging:</strong> <a href="https://element.io/">Element</a> <strong>(Intermediate)</strong><br>
+            Decentralized messaging using the Matrix protocol.</p>
+
+            <p><strong>🔹 Email:</strong> <a href="https://www.thunderbird.net/">Thunderbird</a> <strong>(Beginner)</strong><br>
+            Open-source email client with encryption capabilities.</p>
+
+            <p><strong>🔹 Email Providers:</strong></p>
+            <ul>
+                <li><a href="https://proton.me/mail">ProtonMail</a> - Encrypted email service <strong>(Beginner)</strong></li>
+                <li><a href="https://tutanota.com/">Tutanota</a> - Privacy-focused email <strong>(Beginner)</strong></li>
+            </ul>
+        </div>
+
+        <div class="tool-category">
+            <h3><span class="emoji">☁️</span>Cloud Storage &amp; File Sharing</h3>
+            <p><strong>🔹 Personal Cloud:</strong> <a href="https://nextcloud.com/">Nextcloud</a> <strong>(Advanced)</strong><br>
+            Self-hosted cloud solution for complete control.</p>
+
+            <p><strong>🔹 Anonymous File Sharing:</strong> <a href="https://onionshare.org/">OnionShare</a> <strong>(Intermediate)</strong><br>
+            Share files anonymously through Tor network.</p>
+        </div>
+
+        <div class="tool-category">
+            <h3><span class="emoji">🔒</span>Encryption &amp; Security</h3>
+            <p><strong>🔹 File Encryption:</strong> <a href="https://www.veracrypt.fr/">VeraCrypt</a> <strong>(Intermediate)</strong><br>
+            Encrypt files, folders, and entire drives.</p>
+
+            <p><strong>🔹 Disk Encryption:</strong> Built into most operating systems</p>
+            <ul>
+                <li><strong>Windows:</strong> BitLocker</li>
+                <li><strong>macOS:</strong> FileVault</li>
+                <li><strong>Linux:</strong> LUKS</li>
+            </ul>
+        </div>
+
+        <div class="tool-category">
+            <h3><span class="emoji">🖥️</span>Operating Systems</h3>
+            <p><strong>🔹 Privacy-Focused OS:</strong></p>
+            <ul>
+                <li><a href="https://ubuntu.com/">Ubuntu</a> - User-friendly Linux distribution <strong>(Beginner)</strong></li>
+                <li><a href="https://getfedora.org/">Fedora</a> - Cutting-edge Linux with security focus <strong>(Intermediate)</strong></li>
+                <li><a href="https://tails.boum.org/">Tails</a> - Ultra-private OS for anonymity <strong>(Advanced)</strong></li>
+            </ul>
+        </div>
+
+        <div class="tool-category">
+            <h3><span class="emoji">📱</span>Mobile Security</h3>
+            <p><strong>🔹 App Store:</strong> <a href="https://f-droid.org/">F-Droid</a> (Android) <strong>(Intermediate)</strong><br>
+            Open-source app repository.</p>
+
+            <p><strong>🔹 Mobile Browser:</strong> <a href="https://www.mozilla.org/firefox/mobile/">Firefox Mobile</a> <strong>(Beginner)</strong><br>
+            Same privacy features as desktop version.</p>
+
+            <p><strong>🔹 Mobile VPN:</strong> <a href="https://mullvad.net/">Mullvad</a> or <a href="https://protonvpn.com/">Proton VPN</a> <strong>(Beginner)</strong></p>
+        </div>
+
+        <h2><span class="emoji">✅</span>Security Action Checklists</h2>
+
+        <div class="checklist">
+            <h3><span class="emoji">🎯</span>Beginner Checklist (1-2 hours)</h3>
+            <ul style="list-style: none;">
+                <li><input type="checkbox"> Install Firefox with uBlock Origin</li>
+                <li><input type="checkbox"> Set up Bitwarden password manager</li>
+                <li><input type="checkbox"> Enable 2FA on email, banking, and social media</li>
+                <li><input type="checkbox"> Switch to DuckDuckGo search</li>
+                <li><input type="checkbox"> Install Signal messaging app</li>
+                <li><input type="checkbox"> Check if your data was breached at <a href="https://haveibeenpwned.com/">Have I Been Pwned</a></li>
+                <li><input type="checkbox"> Review privacy settings on social media accounts</li>
+                <li><input type="checkbox"> Enable automatic updates on all devices</li>
+            </ul>
+        </div>
+
+        <div class="checklist">
+            <h3><span class="emoji">🎯</span>Intermediate Checklist (3-4 hours)</h3>
+            <ul style="list-style: none;">
+                <li><input type="checkbox"> Set up encrypted email (ProtonMail or Tutanota)</li>
+                <li><input type="checkbox"> Install additional browser extensions (Privacy Badger, ClearURLs)</li>
+                <li><input type="checkbox"> Configure secure DNS (Cloudflare: 1.1.1.1 or Quad9: 9.9.9.9)</li>
+                <li><input type="checkbox"> Set up file encryption with VeraCrypt</li>
+                <li><input type="checkbox"> Install F-Droid on Android devices</li>
+                <li><input type="checkbox"> Configure VPN for public WiFi use</li>
+                <li><input type="checkbox"> Review and minimize app permissions</li>
+                <li><input type="checkbox"> Set up secure backup strategy</li>
+            </ul>
+        </div>
+
+        <div class="checklist">
+            <h3><span class="emoji">🎯</span>Advanced Checklist (8+ hours)</h3>
+            <ul style="list-style: none;">
+                <li><input type="checkbox"> Deploy personal Nextcloud instance</li>
+                <li><input type="checkbox"> Switch to privacy-focused Linux distribution</li>
+                <li><input type="checkbox"> Set up Tor browser for anonymous browsing</li>
+                <li><input type="checkbox"> Configure email encryption with PGP/GPG</li>
+                <li><input type="checkbox"> Implement full disk encryption</li>
+                <li><input type="checkbox"> Set up secure communication channels (Element/Matrix)</li>
+                <li><input type="checkbox"> Learn basic operational security (OPSEC) principles</li>
+                <li><input type="checkbox"> Regular security audits of your setup</li>
+            </ul>
+        </div>
+
+        <h2><span class="emoji">🛡️</span>Threat Modeling: What Are You Protecting Against?</h2>
+
+        <div class="threat-level threat-casual">
+            <h3><span class="emoji">🔍</span>Casual Privacy (Most Users):</h3>
+            <ul>
+                <li><strong>Threats:</strong> Corporate tracking, data brokers, targeted ads</li>
+                <li><strong>Focus:</strong> Browser privacy, password security, basic encryption</li>
+                <li><strong>Tools:</strong> Firefox + uBlock, Bitwarden, Signal</li>
+            </ul>
+        </div>
+
+        <div class="threat-level threat-enhanced">
+            <h3><span class="emoji">🕵️</span>Enhanced Privacy (Activists, Journalists):</h3>
+            <ul>
+                <li><strong>Threats:</strong> Government surveillance, advanced tracking</li>
+                <li><strong>Focus:</strong> Anonymous browsing, encrypted communication, secure OS</li>
+                <li><strong>Tools:</strong> Tor, Tails, advanced VPN, burner devices</li>
+            </ul>
+        </div>
+
+        <div class="threat-level threat-professional">
+            <h3><span class="emoji">🏢</span>Professional Security (High-Risk Individuals):</h3>
+            <ul>
+                <li><strong>Threats:</strong> Targeted attacks, state-level surveillance</li>
+                <li><strong>Focus:</strong> Comprehensive OPSEC, airgapped systems, professional training</li>
+                <li><strong>Tools:</strong> Specialized security distributions, hardware security keys</li>
+            </ul>
+        </div>
+
+        <h2><span class="emoji">🚨</span>Emergency Response Guide</h2>
+
+        <div class="tool-category">
+            <h3>If Your Accounts Are Compromised:</h3>
+            <ol>
+                <li><strong>Immediately:</strong> Change passwords on affected accounts</li>
+                <li><strong>Check:</strong> Review recent account activity and unfamiliar logins</li>
+                <li><strong>Secure:</strong> Enable 2FA if not already active</li>
+                <li><strong>Monitor:</strong> Watch for suspicious activity in the following weeks</li>
+                <li><strong>Report:</strong> Contact the platform's security team if needed</li>
+            </ol>
+
+            <h3>Emergency Contacts:</h3>
+            <ul>
+                <li><strong>Identity Theft:</strong> <a href="https://identitytheft.gov/">IdentityTheft.gov</a></li>
+                <li><strong>Credit Monitoring:</strong> Contact major credit bureaus</li>
+                <li><strong>Digital Rights:</strong> <a href="https://www.eff.org/">Electronic Frontier Foundation</a></li>
+            </ul>
+        </div>
+
+        <h2><span class="emoji">🌍</span>Regional Considerations</h2>
+        <p><strong>🇪🇺 European Union:</strong> GDPR provides strong data protection rights<br>
+        <strong>🇺🇸 United States:</strong> Consider additional encryption due to surveillance laws<br>
+        <strong>🇨🇳 China:</strong> VPN and Tor access may be restricted or illegal<br>
+        <strong>🇷🇺 Russia:</strong> Signal and some VPN services may be blocked</p>
+
+        <p><em>Always check local laws regarding privacy tools and encryption.</em></p>
+
+        <h2><span class="emoji">📚</span>Additional Learning Resources</h2>
+
+        <div class="tool-category">
+            <h3><span class="emoji">🎓</span>Educational Resources:</h3>
+            <ul>
+                <li><strong>Privacy Basics:</strong> <a href="https://www.eff.org/">Electronic Frontier Foundation</a></li>
+                <li><strong>Security Training:</strong> <a href="https://sec.eff.org/">Security Education Companion</a></li>
+                <li><strong>Tool Comparisons:</strong> <a href="https://privacytools.io/">PrivacyTools.io</a></li>
+                <li><strong>Software Alternatives:</strong> <a href="https://alternativeto.net/">AlternativeTo</a></li>
+            </ul>
+
+            <h3><span class="emoji">🔍</span>Security Checking Tools:</h3>
+            <ul>
+                <li><strong>Data Breaches:</strong> <a href="https://haveibeenpwned.com/">Have I Been Pwned</a></li>
+                <li><strong>Browser Privacy:</strong> <a href="https://coveryourtracks.eff.org/">Cover Your Tracks</a></li>
+                <li><strong>DNS Leak Test:</strong> <a href="https://www.dnsleaktest.com/">DNSLeakTest.com</a></li>
+                <li><strong>VPN Testing:</strong> <a href="https://ipleak.net/">IPLeak.net</a></li>
+            </ul>
+
+            <h3><span class="emoji">📱</span>Mobile-Specific Resources:</h3>
+            <ul>
+                <li><strong>Android Privacy:</strong> <a href="https://exodus-privacy.eu.org/">Exodus Privacy</a></li>
+                <li><strong>iOS Privacy:</strong> Built-in Privacy Report in Settings</li>
+            </ul>
+        </div>
+
+        <h2><span class="emoji">🎯</span>30-Day Privacy Challenge</h2>
+        <p><span class="challenge-week">Week 1:</span> Set up essential tools (Firefox, Bitwarden, Signal)<br>
+        <span class="challenge-week">Week 2:</span> Secure your accounts (2FA, password audit, privacy settings)<br>
+        <span class="challenge-week">Week 3:</span> Advanced setup (VPN, encrypted email, secure DNS)<br>
+        <span class="challenge-week">Week 4:</span> Maintenance and monitoring (security audit, backup verification)</p>
+
+        <div class="footer">
+            <p><strong>Remember:</strong> Perfect security doesn't exist, but you can make yourself a much harder target. Start with the basics and gradually add more advanced protections as you become comfortable with each tool.</p>
+            <p><strong>Have fun and stay secure!</strong> <span class="emoji">🔒✨</span></p>
+        </div>
+    </div>
+
+    <script>
+        function toggleTheme() {
+            const body = document.body;
+            const themeIcon = document.getElementById('theme-icon');
+            const themeText = document.getElementById('theme-text');
+            
+            if (body.getAttribute('data-theme') === 'dark') {
+                body.removeAttribute('data-theme');
+                themeIcon.textContent = '🌙';
+                themeText.textContent = 'Dark Mode';
+                localStorage.setItem('theme', 'light');
+            } else {
+                body.setAttribute('data-theme', 'dark');
+                themeIcon.textContent = '☀️';
+                themeText.textContent = 'Light Mode';
+                localStorage.setItem('theme', 'dark');
+            }
+        }
+
+        // Load saved theme on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            const savedTheme = localStorage.getItem('theme');
+            const themeIcon = document.getElementById('theme-icon');
+            const themeText = document.getElementById('theme-text');
+            
+            if (savedTheme === 'dark') {
+                document.body.setAttribute('data-theme', 'dark');
+                themeIcon.textContent = '☀️';
+                themeText.textContent = 'Light Mode';
+            }
+
+            // Save checkbox states
+            const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+            checkboxes.forEach((checkbox, index) => {
+                const savedState = localStorage.getItem(`checkbox-${index}`);
+                if (savedState === 'true') {
+                    checkbox.checked = true;
+                }
+                
+                checkbox.addEventListener('change', function() {
+                    localStorage.setItem(`checkbox-${index}`, this.checked);
+                });
+            });
+        });
+    </script>
+</body>
+</html>
